@@ -3,13 +3,13 @@ A repository to collect the work of Caldeira Lab postdocs for generating wind an
 
 
 
-##MERRA-2 Solar and Wind CFs
+## MERRA-2 Solar and Wind CFs
 
 We are using MERRA-2 reanalysis data: see https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/ and recommended citation: https://doi.org/10.1175/JCLI-D-16-0758.1
 
 
 
-###Original MERRA-2 data
+### Original MERRA-2 data
 
 https://daac.gsfc.nasa.gov/datasets?page=1&project=MERRA-2 
 
@@ -17,7 +17,7 @@ Lei will periodically pull the newest data from MERRA-2 down to the Memex cluste
 
 
 
-####To downloaded data on MEMEX:
+#### To downloaded data on MEMEX:
 See these files:
  * Wind:  `/lustre/scratch/leiduan/MERRA2_data/Wind`
  * Solar: `/lustre/scratch/leiduan/MERRA2_data/Solar`
@@ -27,7 +27,7 @@ Download scripts example by Lei:
 
 
 
-###Process MERRA-2 data into hourly and annual avg CFs
+### Process MERRA-2 data into hourly and annual avg CFs
 
 Files in: `/lustre/scratch/leiduan/MERRA2_data/`
 
@@ -35,7 +35,7 @@ Python scripts: `./get_{windCF, solarCF}.py`
 Scripts that run the Python files and to submit: `./get_{wind,solar}_CF.csh`
 Before running `.csh` scripts, change `python get_windCF.py YEAR` for your interested year. If no year is given, year-2016 will be calculated
 
-####Example processed data for 2016:
+#### Example processed data for 2016:
 Hourly wind and annual mean:
  * `../MERRA2_400.tavg1_2d_slv_Nx.2016_wcf100m031225.nc`
  * `../MERRA2_400.tavg1_2d_slv_Nx.2016_wcf100m031225_annual.nc`
@@ -46,12 +46,12 @@ Hourly solar and annual mean:
 
 
 
-###Resources
+### Resources
 
 Create regional avg CFs:
 
  * First define the region interested (e.g., California)
- * Then find the shapefiles (end in `*.shp`) for the interested region 
+ * Then find the shapefiles (end in `.shp`) for the interested region 
     * e.g., Download US states data from Natural Earth http://www.naturalearthdata.com/
  * Create a mask using shapefiles to match the resolution of the original CFs files
     * Tools can be used to deal with shapefiles for Python: shapely, Geopandas, or regionmask
@@ -67,7 +67,7 @@ Tools might be useful for Python:
     * Cartopy (used with matplotlib), https://scitools.org.uk/cartopy/docs/latest/
     * VCS (used with UV-CDAT)
 
-###Examples:
+### Examples:
 
 Example scripts can be found here: https://drive.google.com/drive/u/0/folders/1158yObOGB4O41nz74GISGQgmCGSXe1rk
  * Step0: calculate solar and wind from original MERRA-2 data;
