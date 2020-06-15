@@ -78,8 +78,13 @@ Example scripts can be found here: https://drive.google.com/drive/u/0/folders/11
  * Step1: create masks for interested regions, see:
     * `step1p1_Create_masks_for_interested_regions.py`
     * `step1p2_Select_grids_for_interested_regions.py`
- * Step2: After you created the masks, apply them to the CFs data
- * Step3: Convert the default NetCDF files from Step2 to csv
+ * Step2: After you created the masks, apply them to the CFs data, see:
+    * `step2_get_wind_time_series.py`
+    * `step2_run_wind.csh`
+    * `step2_get_solar_time_series.py`
+    * `step2_run_solar.csh`
+ * Step3: Convert the default NetCDF files from Step2 to csv, see:
+    * `step3_generate_excel.py`
  * Data might need: some data you might need to use during calculations;
 
 The above steps represent the complete process needed to generate the final time series of CFs;
