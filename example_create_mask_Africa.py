@@ -16,8 +16,13 @@ import regionmask
 # In[2]:
 
 
-#import shapefile
-SA_shp= gpd.read_file('yourPathto/yourShapefile.shp')  #change directory
+# import shapefile
+# Shapefiles for Africa can be found here: http://www.maplibrary.org/library/stacks/Africa/index.htm
+# below uses a default shape file saved in this repository to ensure the code runs.
+fname = 'data/US_Interconnects/WesternInterconnect.shp' #change directory
+if fname == 'data/US_Interconnects/WesternInterconnect.shp':
+    print(f"\n\n\033[0;33mYou should probably change this example path, {fname}, to something you downloaded for your new region\033[0m\n\n")
+SA_shp= gpd.read_file(fname)
 SA = SA_shp.geometry
 
 
@@ -25,7 +30,7 @@ SA = SA_shp.geometry
 
 
 # Read the variable "SWGDN" from "SWGDN.nc" and get lat/lon info;
-f_axis = cdms.open('Wind_and_Solar_CF_Files/data_might_need/SWGDN.nc')
+f_axis = cdms.open('data/SWGDN.nc')
 v=f_axis('SWGDN')
 lat=v.getAxis(1)  # latitude
 lon=v.getAxis(2)  # longitude
@@ -54,6 +59,7 @@ mask_SA_out.setAxis(1,lon)
 
 
 #safe it as a .nc file
+print("\n\033[0;33mSaving file as selected_masks_SouthAfrica.nc\033[0m\n")
 g=cdms.open('selected_masks_SouthAfrica.nc','w')
 g.write(mask_SA_out)
 g.close()
