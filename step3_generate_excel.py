@@ -6,7 +6,7 @@ import csv, numpy as np, cdms2 as cdms
 data_path = 'where you put the output NetCDF files from the previous steps'
 # The default template contain period from 1980 to 2019
 # If you only want a shorter period, you should modify this template
-ftemp = 'Lei_template.csv'
+ftemp = 'data/Lei_template.csv'
 with open(ftemp, 'rU') as temp_f:
     reader_table = csv.reader(temp_f, delimiter=',')
     table = np.array(list(reader_table))[6:]
