@@ -1,6 +1,8 @@
 # Create_Wind_and_Solar_Resource_Files
 A repository to collect the work of Caldeira Lab postdocs for generating wind and solar capacity factor files for using in MEM.
 
+The code within is heavily based off of work done by Lei Duan: https://github.com/LDuan3008. Many thanks to him and Muriel Hauser
+for preparing this code for uploading.
 
 
 ## MERRA-2 Solar and Wind CFs
