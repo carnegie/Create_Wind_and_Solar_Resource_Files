@@ -70,9 +70,14 @@ Tools might be useful for Python:
 ### Examples:
 
 Example scripts can be found here: https://drive.google.com/drive/u/0/folders/1158yObOGB4O41nz74GISGQgmCGSXe1rk
- * Step0: calculate solar and wind from original MERRA-2 data;
-    * see files `step0_*` in this repository
- * Step1: create masks for interested regions
+ * Step0: calculate solar and wind from original MERRA-2 data, see:
+    * `step0_get_windCF.py`
+    * `step0_get_wind_CF.csh`
+    * `step0_get_solarCF.py`
+    * `step0_get_solar_CF.csh`
+ * Step1: create masks for interested regions, see:
+    * `step1p1_Create_masks_for_interested_regions.py`
+    * `step1p2_Select_grids_for_interested_regions.py`
  * Step2: After you created the masks, apply them to the CFs data
  * Step3: Convert the default NetCDF files from Step2 to csv
  * Data might need: some data you might need to use during calculations;
