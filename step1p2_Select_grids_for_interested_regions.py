@@ -45,8 +45,8 @@ def select_CF(sCF, wCF, idx, *i):
         # mask grids with a value of 0 (grids that are not needed);
         masked_sCF = set_axes(MV.masked_equal(sCF,0.)*0.+1)
         masked_wCF = set_axes(MV.masked_equal(wCF,0.)*0.+1)
-        s_avg_tmp = cdutil.averager(masked_sCF,axis='yx')
-        w_avg_tmp = cdutil.averager(masked_wCF,axis='yx')
+        s_avg_tmp = cdutil.averager(masked_sCF*sCF,axis='yx')
+        w_avg_tmp = cdutil.averager(masked_wCF*wCF,axis='yx')
     elif idx ==3.:
         # set threshold, top X%;
         # you can change this values based on needs;
@@ -67,8 +67,8 @@ def select_CF(sCF, wCF, idx, *i):
         # mask grids with a value lower than the derived thresholds (grids that are not needed);
         masked_sCF = set_axes( MV.masked_less(sCF,s_thresholds)*0.+1 )
         masked_wCF = set_axes( MV.masked_less(wCF,w_thresholds)*0.+1 )
-        s_avg_tmp = cdutil.averager(masked_sCF,axis='yx')
-        w_avg_tmp = cdutil.averager(masked_wCF,axis='yx')
+        s_avg_tmp = cdutil.averager(masked_sCF*sCF,axis='yx')
+        w_avg_tmp = cdutil.averager(masked_wCF*wCF,axis='yx')
     print (f"For method {idx}, averaged solar capacity factor for the filtered grids is: {s_avg_tmp}")
     print (f"For method {idx}, averaged wind capacity factor for the filtered grids is: {w_avg_tmp}")
     return masked_sCF, masked_wCF
@@ -102,20 +102,33 @@ fmask.close()
 # Now I used the NYS mask and land mask to filter the decadal mean solar and wind CFs;
 # Note that both scf and wcf are 2D array because we did the time average: (lat, lon)
 # The returned array (scf_NYS, wcf_NYS) conains decadal mean values of solar/wind CFs for NYS and over land only; 
-scf_NYS = set_axes(scf * mask_NYS * land_mask)
-wcf_NYS = set_axes(wcf * mask_NYS * land_mask)
-# Now we can further selected grids:
-# If I want all grids of NYS:
-s_mask_NYS, w_mask_NYS = select_CF(scf_NYS, wcf_NYS, 1)
-# If I want grids above the thresholds (note that you can change the threshold youself):
-s_mask_NYS, w_mask_NYS = select_CF(scf_NYS, wcf_NYS, 2)
-# If I want grids that have the top X% largest values (note that you can change the threshold youself):
-s_mask_NYS, w_mask_NYS = select_CF(scf_NYS, wcf_NYS, 3)
-# Set the name for these two mask variables
-s_mask_NYS.id = 'smask_NYS'
-w_mask_NYS.id = 'wmask_NYS'
-# Now write these two mask variables to a NetCDF file for further use
-g=cdms.open('selected_mask_NYSTEX_25%.nc','w')
-g.write(s_mask_NYS)
-g.write(w_mask_NYS)
+
+g=cdms.open('selected_mask_NYSTEX_outfile.nc','w') # out_file
+
+def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method, region_name, out_file):
+
+    scf_NYS = set_axes(scf * mask_NYS * land_mask)
+    wcf_NYS = set_axes(wcf * mask_NYS * land_mask)
+    # Now we can further selected grids:
+    s_mask_region, w_mask_region = select_CF(scf_NYS, wcf_NYS, selection_method)
+    # Set the name for these two mask variables
+    s_mask_region.id = f'smask_NYS_mthd{selection_method}'
+    w_mask_region.id = f'wmask_NYS_mthd{selection_method}'
+    # Now write these two mask variables to a NetCDF file for further use
+    out_file.write(s_mask_region)
+    out_file.write(w_mask_region)
+
+region_name = 'NYS'
+# If I want all grids of NYS: method = 1
+# If I want grids above the thresholds (note that you can change the threshold youself): method = 2
+# If I want grids that have the top X% largest values (note that you can change the threshold youself): method = 3
+selection_method = 1
+make_grid_cell_selections(scf, wcf, mask_NYS, land_mask, selection_method, region_name, g)
+selection_method = 2
+make_grid_cell_selections(scf, wcf, mask_NYS, land_mask, selection_method, region_name, g)
+selection_method = 3
+make_grid_cell_selections(scf, wcf, mask_NYS, land_mask, selection_method, region_name, g)
+
+print("\nSaving masks to:")
+print(g)
 g.close()
