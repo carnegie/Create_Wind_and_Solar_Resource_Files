@@ -117,6 +117,9 @@ version of UV-CDAT which only includes the few packages needed:
     * `>> pip install geopandas`
  * Step 5: install the regionmask using pip:
     * `>> pip install regionmask`
+ * Tyler tried all of these in one line and it is working thus far:
+    * `>> conda create -n geo_stuff cdms2 cdutil cartopy geopandas regionmask -c conda-forge`
+    * `>> conda activate geo_stuff`
 
 
 
