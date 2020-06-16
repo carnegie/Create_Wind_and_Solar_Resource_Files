@@ -18,17 +18,7 @@
 import cdms2 as cdms,MV2 as MV, numpy as np,cdutil
 import os,sys,calendar,datetime
 from math import degrees as deg, radians as rad
-
-def get_prefix_name(year):
-    if year <= 1991:
-        prefix_name = "MERRA2_100.tavg1_2d_rad_Nx."
-    if year > 1991 and year <= 2000:
-        prefix_name = "MERRA2_200.tavg1_2d_rad_Nx."
-    if year > 2000 and year <= 2010:
-        prefix_name = "MERRA2_300.tavg1_2d_rad_Nx."
-    if year > 2010:
-        prefix_name = "MERRA2_400.tavg1_2d_rad_Nx."
-    return prefix_name
+from helpers import get_prefix_name
 
 if len(sys.argv) == 1:
     year = 2016
@@ -37,7 +27,7 @@ else:
 
 ###################### control variables ###################### 
 
-case_name = get_prefix_name(int(year))+str(year)
+case_name = get_prefix_name(int(year), True)+str(year)
 isleap = calendar.isleap(int(year))
 if isleap == True:
     leap_year = 1
