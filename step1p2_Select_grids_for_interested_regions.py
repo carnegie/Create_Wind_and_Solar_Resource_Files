@@ -104,8 +104,8 @@ fmask.close()
 # Now I used the NYS mask and land mask to filter the decadal mean solar and wind CFs;
 # Note that both scf and wcf are 2D array because we did the time average: (lat, lon)
 # The returned array (scf_NYS, wcf_NYS) conains decadal mean values of solar/wind CFs for NYS and over land only; 
-scf_NYS = scf * mask_NYS * land_mask
-wcf_NYS = wcf * mask_NYS * land_mask
+scf_NYS = set_axes(scf * mask_NYS * land_mask)
+wcf_NYS = set_axes(wcf * mask_NYS * land_mask)
 # Now we can further selected grids:
 # If I want all grids of NYS:
 s_mask_NYS, w_mask_NYS = select_CF(scf_NYS, wcf_NYS, 1)
