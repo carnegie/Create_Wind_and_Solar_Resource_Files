@@ -5,7 +5,7 @@ from shapely.geometry import MultiPolygon
 
 ### Step 0 
 # Read the variable "SWGDN" from "SWGDN.nc" and get lat/lon info;
-f_axis = cdms.open('SWGDN.nc')
+f_axis = cdms.open('data/SWGDN.nc')
 v=f_axis('SWGDN')
 lat=v.getAxis(1)  # latitude
 lon=v.getAxis(2)  # longitude
@@ -15,10 +15,10 @@ f_axis.close()
 
 ### Step 1
 # Seprate land and ocean grids; 
+f_land_mask = cdms.open('data/land_sea_mask_merra.nc4')
 land_mask_tmp = f_land_mask('FRLAND',squeeze=1) # land fraction
 # We set grids with "FRLAND" >= 0.5 as land, and have a value of 1;
 # Other grids ("FRLAND" < 0.5) are treated as ocean, and have a value of 0;
-f_land_mask = cdms.open('land_sea_mask_merra.nc4')
 land_mask_tmp[land_mask_tmp>=0.5] = 1.
 land_mask_tmp[land_mask_tmp<0.5]  = 0.
 # Masked all ocean grids, and the returned ocean grids have no value at all ("-"); 

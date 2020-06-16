@@ -1,4 +1,5 @@
 import cdms2 as cdms, MV2 as MV, cdutil, numpy as np
+from helpers import get_prefix_name
 
 ### Step 0, prepare
 # Again, get lat/lon information
@@ -78,14 +79,19 @@ def select_CF(sCF, wCF, idx, *i):
 # For the code below, I first downloaded the annual mean solar and wind CFs data
 # between 2009 and 2018 and calculated the decadal mean global CFs data; 
 # The variables "scf" and "wcf" are decadal mean results, and are further used below;
-data_path = 'Where you put the downloaded annual mean data (ends with "annual" on MEMEX)'
+data_path = '/lustre/scratch/leiduan/MERRA2_data/'
+start_year = 2009
+n_years = 10
 scf = np.zeros([len(lat), len(lon)])
 wcf = np.zeros([len(lat), len(lon)])
-for i in range(10):
-    sf = cdms.open(data_path + str(i+2009) +'_scf_annual.nc')
-    wf = cdms.open(data_path + str(i+2009) +'_wcf100m031225_annual.nc')
-    scf = scf + sf('scf_annual')/10.
-    wcf = wcf + wf('wcf_annual')/10.
+for i in range(n_years):
+    year = i + start_year
+    solar_prefix = get_prefix_name(year, True)
+    wind_prefix = get_prefix_name(year, False)
+    sf = cdms.open(data_path + solar_prefix + str(year) +'_scf_annual.nc')
+    wf = cdms.open(data_path + wind_prefix + str(year) +'_wcf100m031225_annual.nc')
+    scf = scf + sf('scf_annual')/float(n_years)
+    wcf = wcf + wf('wcf_annual')/float(n_years)
     sf.close()
     wf.close()
 
