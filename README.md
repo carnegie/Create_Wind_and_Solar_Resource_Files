@@ -5,6 +5,11 @@ The code within is heavily based off of work done by Lei Duan: https://github.co
 for preparing this code for uploading.
 
 
+## Methodology
+
+For the technical details of the calculations please see `Methodology.md`.
+
+
 ## MERRA-2 Solar and Wind CFs
 
 We are using MERRA-2 reanalysis data: see https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/ and recommended citation: https://doi.org/10.1175/JCLI-D-16-0758.1
