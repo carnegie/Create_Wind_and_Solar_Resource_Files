@@ -2,13 +2,13 @@ import cdms2 as cdms, MV2 as MV, cdutil, numpy as np
 
 ### Step 0, prepare
 # Again, get lat/lon information
-f_axis = cdms.open('SWGDN.nc')
+f_axis = cdms.open('data/SWGDN.nc')
 v=f_axis('SWGDN')
 lat=v.getAxis(1) 
 lon=v.getAxis(2)
 f_axis.close()  
 # Get land mask
-f_land_mask = cdms.open('land_sea_mask_merra.nc4')
+f_land_mask = cdms.open('data/land_sea_mask_merra.nc4')
 land_mask_tmp = f_land_mask('FRLAND',squeeze=1)
 land_mask_tmp[land_mask_tmp>=0.5] = 1.
 land_mask_tmp[land_mask_tmp<0.5]  = 0.

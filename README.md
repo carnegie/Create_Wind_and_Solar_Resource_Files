@@ -25,9 +25,11 @@ Lei will periodically pull the newest data from MERRA-2 down to the Memex cluste
 
 
 #### To downloaded data on MEMEX:
+
 See these files:
  * Wind:  `/lustre/scratch/leiduan/MERRA2_data/Wind`
  * Solar: `/lustre/scratch/leiduan/MERRA2_data/Solar`
+
 Download scripts example by Lei: 
  * Input file: `/lustre/scratch/leiduan/MERRA2_data/Wind/wind_list3.txt`
  * Script: `/lustre/scratch/leiduan/MERRA2_data/Wind/test.csh`
@@ -43,13 +45,20 @@ Scripts that run the Python files and to submit: `./get_{wind,solar}_CF.csh`
 Before running `.csh` scripts, change `python get_windCF.py YEAR` for your interested year. If no year is given, year-2016 will be calculated
 
 #### Example processed data for 2016:
+
+From `/lustre/scratch/leiduan/MERRA2_data/`:
+
 Hourly wind and annual mean:
- * `../MERRA2_400.tavg1_2d_slv_Nx.2016_wcf100m031225.nc`
- * `../MERRA2_400.tavg1_2d_slv_Nx.2016_wcf100m031225_annual.nc`
+ * `MERRA2_400.tavg1_2d_slv_Nx.2016_wcf100m031225.nc`
+ * `MERRA2_400.tavg1_2d_slv_Nx.2016_wcf100m031225_annual.nc`
+
 Hourly solar and annual mean: 
- * `../MERRA2_400.tavg1_2d_rad_Nx.2016_scf.nc`
- * `../MERRA2_400.tavg1_2d_rad_Nx.2016_scf_annual.nc`
- * `*_annual.nc` contains the annual average capacity factor for each grid cell
+ * `MERRA2_400.tavg1_2d_rad_Nx.2016_scf.nc`
+ * `MERRA2_400.tavg1_2d_rad_Nx.2016_scf_annual.nc`
+
+The `*_annual.nc` files contain the annual average capacity factor for each grid cell for each year 
+and are approximately 1.5 MB, while the other files contain the full hourly time series 
+information for each grid cell for each year and are approximately 7 GB.
 
 
 
@@ -62,7 +71,7 @@ Create regional avg CFs:
     * e.g., Download US states data from Natural Earth http://www.naturalearthdata.com/
  * Create a mask using shapefiles to match the resolution of the original CFs files
     * Tools can be used to deal with shapefiles for Python: shapely, Geopandas, or regionmask
-    * See examples below
+    * See `example_create_mask_Africa.py` example below
  * Select grids that are within the interested region or use other criterions, and then calculate the average CFs for the interested region for each hour
 
 Tools might be useful for Python:
