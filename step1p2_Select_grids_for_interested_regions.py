@@ -69,8 +69,8 @@ def select_CF(sCF, wCF, idx, *i):
         masked_wCF = set_axes( MV.masked_less(wCF,w_thresholds)*0.+1 )
         s_avg_tmp = cdutil.averager(masked_sCF,axis='yx')
         w_avg_tmp = cdutil.averager(masked_wCF,axis='yx')
-    print ("Averaged solar capacity factor for the filtered grids is: ", s_avg_tmp)
-    print ("Averaged wind capacity factor for the filtered grids is: ", w_avg_tmp)
+    print (f"For method {idx}, averaged solar capacity factor for the filtered grids is: {s_avg_tmp}")
+    print (f"For method {idx}, averaged wind capacity factor for the filtered grids is: {w_avg_tmp}")
     return masked_sCF, masked_wCF
 
 
@@ -79,17 +79,15 @@ def select_CF(sCF, wCF, idx, *i):
 # For the code below, I first downloaded the annual mean solar and wind CFs data
 # between 2009 and 2018 and calculated the decadal mean global CFs data; 
 # The variables "scf" and "wcf" are decadal mean results, and are further used below;
-data_path = '/lustre/scratch/leiduan/MERRA2_data/'
+data_path = 'data/solar_wind_annual_data/'
 start_year = 2009
 n_years = 10
 scf = np.zeros([len(lat), len(lon)])
 wcf = np.zeros([len(lat), len(lon)])
 for i in range(n_years):
     year = i + start_year
-    solar_prefix = get_prefix_name(year, True)
-    wind_prefix = get_prefix_name(year, False)
-    sf = cdms.open(data_path + solar_prefix + str(year) +'_scf_annual.nc')
-    wf = cdms.open(data_path + wind_prefix + str(year) +'_wcf100m031225_annual.nc')
+    sf = cdms.open(f"{data_path}{str(year)}_scf_annual.nc")
+    wf = cdms.open(f"{data_path}{str(year)}_wcf100m031225_annual.nc")
     scf = scf + sf('scf_annual')/float(n_years)
     wcf = wcf + wf('wcf_annual')/float(n_years)
     sf.close()
