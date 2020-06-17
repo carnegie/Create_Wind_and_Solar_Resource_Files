@@ -86,8 +86,10 @@ scf = np.zeros([len(lat), len(lon)])
 wcf = np.zeros([len(lat), len(lon)])
 for i in range(n_years):
     year = i + start_year
-    sf = cdms.open(f"{data_path}{str(year)}_scf_annual.nc")
-    wf = cdms.open(f"{data_path}{str(year)}_wcf100m031225_annual.nc")
+    solar_file_name = get_prefix_name(year, True)
+    wind_file_name = get_prefix_name(year, False)
+    sf = cdms.open(f"{data_path}{solar_file_name}{str(year)}_scf_annual.nc")
+    wf = cdms.open(f"{data_path}{wind_file_name}{str(year)}_wcf100m031225_annual.nc")
     scf = scf + sf('scf_annual')/float(n_years)
     wcf = wcf + wf('wcf_annual')/float(n_years)
     sf.close()
@@ -119,9 +121,9 @@ def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method
     out_file.write(s_mask_region)
     out_file.write(w_mask_region)
 
-# If I want all grids of NYS: method = 1
-# If I want grids above the thresholds (note that you can change the threshold youself): method = 2
-# If I want grids that have the top X% largest values (note that you can change the threshold youself): method = 3
+# If I want all grids of NYS: selection_method = 1
+# If I want grids above the thresholds (note that you can change the threshold youself): selection_method = 2
+# If I want grids that have the top X% largest values (note that you can change the threshold youself): selection_method = 3
 selection_method = 1
 make_grid_cell_selections(scf, wcf, mask_region, land_mask, selection_method, region_name, g)
 selection_method = 2
