@@ -13,17 +13,21 @@ import numpy as np
 import regionmask
 
 
+# Keeping region_name == WesternInterconnect will allow you to run a working example
+# for step1p2 as well.
+region_name = 'WesternInterconnect'
+
 # In[2]:
 
 
 # import shapefile
 # Shapefiles for Africa can be found here: http://www.maplibrary.org/library/stacks/Africa/index.htm
 # below uses a default shape file saved in this repository to ensure the code runs.
-fname = 'data/US_Interconnects/WesternInterconnect.shp' #change directory
+fname = f'data/US_Interconnects/{region_name}.shp' #change directory
 if fname == 'data/US_Interconnects/WesternInterconnect.shp':
     print(f"\n\n\033[0;33mYou should probably change this example path, {fname}, to something you downloaded for your new region\033[0m\n\n")
-SA_shp= gpd.read_file(fname)
-SA = SA_shp.geometry
+shp = gpd.read_file(fname)
+region = shp.geometry
 
 
 # In[3]:
@@ -41,26 +45,26 @@ f_axis.close()
 
 
 #create mask
-SA_poly=regionmask.Regions(SA)
-mask = np.ma.masked_invalid(SA_poly.mask(lon, lat))
+poly=regionmask.Regions(region)
+mask = np.ma.masked_invalid(poly.mask(lon, lat))
 
 
 # In[22]:
 
 
 #formatting
-mask_SA_out = MV.array(mask)
-mask_SA_out.id='mask_SoutAfrica'
-mask_SA_out.setAxis(0,lat)
-mask_SA_out.setAxis(1,lon)
+mask_out = MV.array(mask)
+mask_out.id=f'mask_{region_name}'
+mask_out.setAxis(0,lat)
+mask_out.setAxis(1,lon)
 
 
 # In[23]:
 
 
-#safe it as a .nc file
-print("\n\033[0;33mSaving file as selected_masks_SouthAfrica.nc\033[0m\n")
-g=cdms.open('selected_masks_SouthAfrica.nc','w')
-g.write(mask_SA_out)
+#save it as a .nc file
+print(f"\n\033[0;33mSaving file as selected_masks_{region_name}.nc\033[0m\n")
+g=cdms.open(f'selected_masks_{region_name}.nc','w')
+g.write(mask_out)
 g.close()
 

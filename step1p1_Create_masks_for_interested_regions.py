@@ -89,7 +89,7 @@ mask_TEX_out.setAxis(0,lat)
 mask_TEX_out.setAxis(1,lon)
 
 # Create a new NetCDF file and write these two variables into it for later use;
-g=cdms.open('selected_masks_NYSTEX.nc','w')
+g=cdms.open('selected_masks_NYS.nc','w')
 g.write(mask_NYS_out)
 g.write(mask_TEX_out)
 g.close()

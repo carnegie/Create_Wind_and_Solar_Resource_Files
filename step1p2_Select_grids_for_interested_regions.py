@@ -96,38 +96,38 @@ for i in range(n_years):
 ### Step 2
 # Take the NYS as an example:
 # I first read the NYS mask created in the previous step
-fmask=cdms.open('selected_masks_NYSTEX.nc')
-mask_NYS= fmask('mask_NYS')
+region_name = 'NYS'
+fmask=cdms.open(f'selected_masks_{region_name}.nc')
+mask_region= fmask(f'mask_{region_name}')
 fmask.close()
 # Now I used the NYS mask and land mask to filter the decadal mean solar and wind CFs;
 # Note that both scf and wcf are 2D array because we did the time average: (lat, lon)
-# The returned array (scf_NYS, wcf_NYS) conains decadal mean values of solar/wind CFs for NYS and over land only; 
+# The returned array (scf_region, wcf_region) conains decadal mean values of solar/wind CFs for NYS and over land only; 
 
-g=cdms.open('selected_mask_NYSTEX_outfile.nc','w') # out_file
+g=cdms.open(f'selected_mask_{region_name}_outfile.nc','w') # out_file
 
 def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method, region_name, out_file):
 
-    scf_NYS = set_axes(scf * mask_NYS * land_mask)
-    wcf_NYS = set_axes(wcf * mask_NYS * land_mask)
+    scf_region = set_axes(scf * region_mask * land_mask)
+    wcf_region = set_axes(wcf * region_mask * land_mask)
     # Now we can further selected grids:
-    s_mask_region, w_mask_region = select_CF(scf_NYS, wcf_NYS, selection_method)
+    s_mask_region, w_mask_region = select_CF(scf_region, wcf_region, selection_method)
     # Set the name for these two mask variables
-    s_mask_region.id = f'smask_NYS_mthd{selection_method}'
-    w_mask_region.id = f'wmask_NYS_mthd{selection_method}'
+    s_mask_region.id = f'smask_{region_name}_mthd{selection_method}'
+    w_mask_region.id = f'wmask_{region_name}_mthd{selection_method}'
     # Now write these two mask variables to a NetCDF file for further use
     out_file.write(s_mask_region)
     out_file.write(w_mask_region)
 
-region_name = 'NYS'
 # If I want all grids of NYS: method = 1
 # If I want grids above the thresholds (note that you can change the threshold youself): method = 2
 # If I want grids that have the top X% largest values (note that you can change the threshold youself): method = 3
 selection_method = 1
-make_grid_cell_selections(scf, wcf, mask_NYS, land_mask, selection_method, region_name, g)
+make_grid_cell_selections(scf, wcf, mask_region, land_mask, selection_method, region_name, g)
 selection_method = 2
-make_grid_cell_selections(scf, wcf, mask_NYS, land_mask, selection_method, region_name, g)
+make_grid_cell_selections(scf, wcf, mask_region, land_mask, selection_method, region_name, g)
 selection_method = 3
-make_grid_cell_selections(scf, wcf, mask_NYS, land_mask, selection_method, region_name, g)
+make_grid_cell_selections(scf, wcf, mask_region, land_mask, selection_method, region_name, g)
 
 print("\nSaving masks to:")
 print(g)
