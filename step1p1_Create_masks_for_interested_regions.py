@@ -37,7 +37,6 @@ mask = np.array(states.mask(lon, lat, wrap_lon=False))
 NY = np.ma.masked_not_equal(mask, 34)*0.+1.
 TX = np.ma.masked_not_equal(mask, 43)*0.+1.
 
-""" 
 # Here is another example using shapefiles and geopandas;
 # This could be done using regionmask as well;
 
@@ -53,11 +52,11 @@ def generate_mask_from_geometry(lat1d, lon1d, lat2d, lon2d, geometry):
     mask_2d = np.array(np.array(mask).reshape(lon2d.shape))
     return mask_2d
 
-WI_shp= gpd.read_file('./Interconnects2/WesternInterconnect.shp') # These are some shapefiles I downloaded bfore
+WI_shp= gpd.read_file('data/US_Interconnects/WesternInterconnect.shp') # These are some shapefiles I downloaded bfore
 WI = WI_shp.geometry
-EI_shp= gpd.read_file('./Interconnects2/EasternInterconnect.shp')
+EI_shp= gpd.read_file('data/US_Interconnects/EasternInterconnect.shp')
 EI = EI_shp.geometry
-TI_shp= gpd.read_file('./Interconnects2/TexasInterconnect.shp')
+TI_shp= gpd.read_file('data/US_Interconnects/TexasInterconnect.shp')
 TI = TI_shp.geometry
 
 lon1, lat1 = np.meshgrid(lon,lat)
@@ -74,7 +73,6 @@ mask_TI = generate_mask_from_geometry(lat2, lon2, lat1, lon1, TI)
 mask_TI_out = MV.array(mask_TI); mask_TI_out.id='mask_TI'; mask_TI_out.setAxis(0,lat); mask_TI_out.setAxis(1,lon)
 
 # End of example
-"""
 
 
 # For the derived NYS and Texas masks, give them name, lat, and lon info;
@@ -92,4 +90,5 @@ mask_TEX_out.setAxis(1,lon)
 g=cdms.open('selected_masks_NYS.nc','w')
 g.write(mask_NYS_out)
 g.write(mask_TEX_out)
+g.write(mask_TI_out)
 g.close()
