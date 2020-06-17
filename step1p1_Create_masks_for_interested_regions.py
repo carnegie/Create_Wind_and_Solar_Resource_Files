@@ -1,5 +1,6 @@
 import cdms2 as cdms, numpy as np, MV2 as MV, geopandas as gpd, regionmask
 from shapely.geometry import MultiPolygon
+from shapely.geometry import Point
 
 
 
@@ -43,7 +44,7 @@ TX = np.ma.masked_not_equal(mask, 43)*0.+1.
 def generate_mask_from_geometry(lat1d, lon1d, lat2d, lon2d, geometry):
     mask = []
     for lat3, lon3 in zip(lat1d, lon1d):
-        this_point = gpd.geoseries.Point(lon3,lat3)
+        this_point = Point(lon3,lat3)
         res = geometry.contains(this_point)
         if res.values[0]:
             mask.append(1)
@@ -63,12 +64,15 @@ lon1, lat1 = np.meshgrid(lon,lat)
 lon2 = lon1.reshape(-1)
 lat2 = lat1.reshape(-1)
 
-mask_WI = generate_mask_from_geometry(lat2, lon2, lat1, lon1, WI)
-mask_WI_out = MV.array(mask_WI); mask_WI_out.id='mask_WI'; mask_WI_out.setAxis(0,lat); mask_WI_out.setAxis(1,lon)
+#print("Mask for: mask_WI (this takes 15 seconds)")
+#mask_WI = generate_mask_from_geometry(lat2, lon2, lat1, lon1, WI)
+#mask_WI_out = MV.array(mask_WI); mask_WI_out.id='mask_WI'; mask_WI_out.setAxis(0,lat); mask_WI_out.setAxis(1,lon)
+#
+#print("Mask for: mask_EI (this takes 15 seconds)")
+#mask_EI = generate_mask_from_geometry(lat2, lon2, lat1, lon1, EI)
+#mask_EI_out = MV.array(mask_EI); mask_EI_out.id='mask_EI'; mask_EI_out.setAxis(0,lat); mask_EI_out.setAxis(1,lon)
 
-mask_EI = generate_mask_from_geometry(lat2, lon2, lat1, lon1, EI)
-mask_EI_out = MV.array(mask_EI); mask_EI_out.id='mask_EI'; mask_EI_out.setAxis(0,lat); mask_EI_out.setAxis(1,lon)
-
+print("Mask for: mask_TI (this takes 15 seconds)")
 mask_TI = generate_mask_from_geometry(lat2, lon2, lat1, lon1, TI)
 mask_TI_out = MV.array(mask_TI); mask_TI_out.id='mask_TI'; mask_TI_out.setAxis(0,lat); mask_TI_out.setAxis(1,lon)
 
