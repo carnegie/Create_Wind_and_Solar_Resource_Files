@@ -100,7 +100,15 @@ for i in range(n_years):
 # I first read the NYS mask created in the previous step
 region_name = 'NYS'
 fmask=cdms.open(f'selected_masks_{region_name}.nc')
-mask_region= fmask(f'mask_{region_name}')
+#mask_region= fmask(f'mask_{region_name}')
+#mask_region= fmask(f'mask_TI')
+#mask_region2= fmask(f'mask_TEX')
+mask_region= fmask(f'mask_NYS')
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+#ax.plot(mask_region)
+ax.plot(mask_region)
+plt.show()
 fmask.close()
 # Now I used the NYS mask and land mask to filter the decadal mean solar and wind CFs;
 # Note that both scf and wcf are 2D array because we did the time average: (lat, lon)
