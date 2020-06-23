@@ -95,19 +95,6 @@ for i in range(n_years):
     sf.close()
     wf.close()
 
-### Step 2
-# Take the NYS as an example:
-# I first read the NYS mask created in the previous step
-region_name = 'NYS'
-fmask=cdms.open(f'selected_masks_{region_name}.nc')
-mask_region= fmask(f'mask_{region_name}')
-fmask.close()
-# Now I used the NYS mask and land mask to filter the decadal mean solar and wind CFs;
-# Note that both scf and wcf are 2D array because we did the time average: (lat, lon)
-# The returned array (scf_region, wcf_region) conains decadal mean values of solar/wind CFs for NYS and over land only; 
-
-g=cdms.open(f'selected_mask_{region_name}_outfile.nc','w') # out_file
-
 def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method, region_name, out_file):
 
     scf_region = set_axes(scf * region_mask * land_mask)
@@ -121,16 +108,28 @@ def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method
     out_file.write(s_mask_region)
     out_file.write(w_mask_region)
 
-# If I want all grids of NYS: selection_method = 1
-# If I want grids above the thresholds (note that you can change the threshold youself): selection_method = 2
-# If I want grids that have the top X% largest values (note that you can change the threshold youself): selection_method = 3
-selection_method = 1
-make_grid_cell_selections(scf, wcf, mask_region, land_mask, selection_method, region_name, g)
-selection_method = 2
-make_grid_cell_selections(scf, wcf, mask_region, land_mask, selection_method, region_name, g)
-selection_method = 3
-make_grid_cell_selections(scf, wcf, mask_region, land_mask, selection_method, region_name, g)
+
+### Step 2
+# Take the NYS as an example:
+# I first read the NYS mask created in the previous step
+fmask=cdms.open(f'selected_masks.nc')
+g=cdms.open(f'selected_mask_outfile.nc','w') # out_file
+for region_name in ['NYS', 'TEX'] : #'NYIS_2018', 'TI', 'ERCO_2018', 'PJM_2018']:
+    print(f"REGION: {region_name}")
+    mask_region= fmask(f'mask_{region_name}')
+    # Now I used the NYS mask and land mask to filter the decadal mean solar and wind CFs;
+    # Note that both scf and wcf are 2D array because we did the time average: (lat, lon)
+    # The returned array (scf_region, wcf_region) conains decadal mean values of solar/wind CFs for NYS and over land only; 
+
+    # If I want all grids of NYS: selection_method = 1
+    # If I want grids above the thresholds (note that you can change the threshold youself): selection_method = 2
+    # If I want grids that have the top X% largest values (note that you can change the threshold youself): selection_method = 3
+    for i in [ 1, 2, 3]:
+    #selection_method = 1
+        make_grid_cell_selections(scf, wcf, mask_region, land_mask, i, region_name, g)
+
 
 print("\nSaving masks to:")
 print(g)
 g.close()
+fmask.close()
