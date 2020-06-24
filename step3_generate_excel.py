@@ -91,9 +91,12 @@ for yr in range(min_year, max_year+1):
     # Make datetime list with 1 hr spacing
     dts = pd.date_range(f"{yr}-01-01 01:00:00", f"{yr+1}-01-01 00:00:00", freq="1H")
     s_file = cdms.open(get_file_by_year(s_files, yr))
-    s_nc_id = f'averaged_s'#mask_{region}_{method}'
+    s_nc_id = f'averaged_smask_{region}_{method}'
     s_cfs = s_file(s_nc_id,squeeze=1)
-    df = pd.DataFrame({'date_time': dts, 's_cfs': s_cfs})
+    w_file = cdms.open(get_file_by_year(w_files, yr))
+    w_nc_id = f'averaged_wmask_{region}_{method}'
+    w_cfs = w_file(w_nc_id,squeeze=1)
+    df = pd.DataFrame({'date_time': dts, 's_cfs': s_cfs, 'w_cfs': w_cfs})
     if first:
         master = df
         first = False
@@ -110,7 +113,7 @@ def make_MEM_compatible(df, save_name, cfs_var):
 
     with open(f'{save_name}.csv', 'w', newline='') as csvfile:
 
-        fieldnames = ['year', 'month', 'day', 'hour', 'cfs']
+        fieldnames = ['year', 'month', 'day', 'hour', cfs_var]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -122,12 +125,12 @@ def make_MEM_compatible(df, save_name, cfs_var):
                 'month': mem_format.month,
                 'day': mem_format.day,
                 'hour': mem_format.hour+1,
-                'cfs': df.iloc[i][cfs_var],
+                cfs_var: df.iloc[i][cfs_var],
             })
             if mem_format.year != now_year:
                 print(f"Processing {mem_format.year}")
                 now_year = mem_format.year
     print(f"Outfile: {save_name}.csv")
 
-make_MEM_compatible(master, f"{region}_method{method}_solar", "s_cfs")
-#make_MEM_compatible(master, f"{region}_method{method}_wind", "w_cfs")
+make_MEM_compatible(master, f"{region}_{method}_{str(min_year)}-{str(max_year)}_solar", "s_cfs")
+make_MEM_compatible(master, f"{region}_{method}_{str(min_year)}-{str(max_year)}_wind", "w_cfs")
