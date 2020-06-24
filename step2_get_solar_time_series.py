@@ -1,17 +1,7 @@
 import cdms2 as cdms, MV2 as MV, cdutil, numpy as np, sys,calendar
 import os
+from helpers import get_prefix_name
 
-# This function is used to find CFs data name
-def get_prefix_name(year):
-    if year <= 1991:
-        prefix_name = "MERRA2_100.tavg1_2d_rad_Nx."
-    if year > 1991 and year <= 2000:
-        prefix_name = "MERRA2_200.tavg1_2d_rad_Nx."
-    if year > 2000 and year <= 2010:
-        prefix_name = "MERRA2_300.tavg1_2d_rad_Nx."
-    if year > 2010:
-        prefix_name = "MERRA2_400.tavg1_2d_rad_Nx."
-    return prefix_name
 
 print("\nRunning ")
 print(sys.argv[0])
@@ -40,13 +30,20 @@ if len(sys.argv) > 3:
 else:
     date = 'June23'
 
-print("Processing for year %i, region %s, with selection method %i" % (year, region, mthd))
+if len(sys.argv) > 4:
+    scf_or_wcf = sys.argv[5]
+else:
+    scf_or_wcf = 'scf'
+
+print("Processing for year %i, region %s, with selection method %i, for %s" % (year, region, mthd, scf_or_wcf))
 
 # Data path to find the solar/wind CFs;
 # Name of data to open based on year;
 # The total hour length is different for leap and non-leap year;
 data_patch = '/lustre/scratch/leiduan/MERRA2_data/MERRA2_CF_Data/'
-case_name = get_prefix_name(int(year))+str(year)+'_scf.nc'
+app = 'scf' if scf_or_wcf == 'scf' else 'wcf100m031225'
+is_solar = True if scf_or_wcf == 'scf' else False
+case_name = get_prefix_name(int(year), is_solar)+str(year)+'_'+app+'.nc'
 isleap = calendar.isleap(int(year))
 if isleap == True:
     leap_year = 1
@@ -62,11 +59,11 @@ f_mask.close()
 
 # Get hourly solar data
 fs = cdms.open(data_patch+case_name)
-scf = MV.array(fs('scf',squeeze=1))
-scf[scf<0] = 0.
-scf[scf>1] = 1.
+cfs = MV.array(fs(scf_or_wcf, squeeze=1))
+cfs[cfs<0] = 0.
+cfs[cfs>1] = 1.
 fs.close()
-len_axis = len(scf.getAxis(0))
+len_axis = len(cfs.getAxis(0))
 
 # These are to set the output format, you can ignore these lines
 # Use NetCDF3 Classic format
@@ -84,16 +81,16 @@ if not os.path.exists('outfiles'):
 if not os.path.exists('outfiles/%s_%s_mthd%i' % (date, region, mthd)):
     os.makedirs('outfiles/%s_%s_mthd%i' % (date, region, mthd))
 # Pre-define the output variable and output file
-g=cdms.open('outfiles/%s_%s_mthd%i/averaged_%s_scf%i.nc' % (date, region, mthd, region, year),'w')
+g=cdms.open('outfiles/%s_%s_mthd%i/averaged_%s_%s%i.nc' % (date, region, mthd, region, scf_or_wcf, year),'w')
 new_data = MV.array(np.zeros(len_axis))
-new_data.id = 'averaged_' + region_mask_list[0]
+new_data.id = 'averaged_' + region_mask_list
 for i in range(len_axis):
     print(i)
-    scf_idx = scf[i] * mask_idx
-    scf_idx.setAxis(0,lat)
-    scf_idx.setAxis(1,lon)
+    cfs_idx = cfs[i] * mask_idx
+    cfs_idx.setAxis(0,lat)
+    cfs_idx.setAxis(1,lon)
     # If lat/lon info is given, the following average function calculate the 
     # area weighted mean
-    new_data[i] = cdutil.averager(scf_idx, axis='yx')
+    new_data[i] = cdutil.averager(cfs_idx, axis='yx')
 g.write(new_data)
 g.close()
