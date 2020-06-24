@@ -73,8 +73,9 @@ cdms.setNetcdfDeflateLevelFlag(0) # netcdf3 classic...
 
 # Read the masks you created in previous step, provided the name below
 fm = cdms.open('selected_mask_outfile.nc')
-region_mask_list = 'smask_%s_mthd%i' % (region, mthd)
-mask_idx = MV.array(fm(region_mask_list))
+pre = 's' if scf_or_wcf == 'scf' else 'w'
+region_mask = pre+'mask_%s_mthd%i' % (region, mthd)
+mask_idx = MV.array(fm(region_mask))
 # Make path for saving files
 if not os.path.exists('outfiles'):
     os.makedirs('outfiles')
@@ -83,7 +84,7 @@ if not os.path.exists('outfiles/%s_%s_mthd%i' % (date, region, mthd)):
 # Pre-define the output variable and output file
 g=cdms.open('outfiles/%s_%s_mthd%i/averaged_%s_%s%i.nc' % (date, region, mthd, region, scf_or_wcf, year),'w')
 new_data = MV.array(np.zeros(len_axis))
-new_data.id = 'averaged_' + region_mask_list
+new_data.id = 'averaged_' + region_mask
 for i in range(len_axis):
     print(i)
     cfs_idx = cfs[i] * mask_idx
