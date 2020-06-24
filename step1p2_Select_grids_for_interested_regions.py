@@ -159,7 +159,7 @@ import os
 if not os.path.exists('plots'):
     os.makedirs('plots')
 
-def plot_region(mask_region, save_name, extent=[-150,-50, 10, 80]):
+def plot_region(lon, lat, mask_region, save_name, extent=[-150,-50, 10, 80]):
     plt.close()
     print(save_name)
     ax = plt.subplot(111, projection = ccrs.PlateCarree())
@@ -186,16 +186,24 @@ extents = {
         'ERCO_2018' : [-110, -85, 20, 40],
         }
 
+
+# matplotlib pcolormesh plots points based on the lower left coordinate
+# to center the value when plotted, provide shifted coordinates.
+dlat = 0.5 # From inspection of lat and lon
+dlon = 0.625 
+plot_shifted_lon = [i - dlon/2. for i in lon]
+plot_shifted_lat = [i - dlat/2. for i in lat]
+
 for region_name in ['NYS', 'TEX',]:# 'NYIS_2018', 'TI', 'ERCO_2018', 'PJM_2018']:
 
     print(region_name)
 
     mask_region = fmask(f'mask_{region_name}')
-    plot_region(mask_region, f'{region_name}_full_region', extents[region_name])
+    plot_region(plot_shifted_lon, plot_shifted_lat, mask_region, f'{region_name}_full_region', extents[region_name])
 
     for mthd in [1, 2, 3]:
-        plot_region(results[region_name][mthd][0], f'{region_name}_{mthd}_solar', extents[region_name])
-        plot_region(results[region_name][mthd][1], f'{region_name}_{mthd}_wind', extents[region_name])
+        plot_region(plot_shifted_lon, plot_shifted_lat, results[region_name][mthd][0], f'{region_name}_{mthd}_solar', extents[region_name])
+        plot_region(plot_shifted_lon, plot_shifted_lat, results[region_name][mthd][1], f'{region_name}_{mthd}_wind', extents[region_name])
 
 
 
