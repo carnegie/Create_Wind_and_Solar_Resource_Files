@@ -107,6 +107,7 @@ def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method
     # Now write these two mask variables to a NetCDF file for further use
     out_file.write(s_mask_region)
     out_file.write(w_mask_region)
+    return s_mask_region, w_mask_region
 
 
 ### Step 2
@@ -114,22 +115,89 @@ def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method
 # I first read the NYS mask created in the previous step
 fmask=cdms.open(f'selected_masks.nc')
 g=cdms.open(f'selected_mask_outfile.nc','w') # out_file
-for region_name in ['NYS', 'TEX'] : #'NYIS_2018', 'TI', 'ERCO_2018', 'PJM_2018']:
+results = {}
+for region_name in ['NYS', 'TEX',] : # 'NYIS_2018', 'TI', 'ERCO_2018', 'PJM_2018']:
     print(f"REGION: {region_name}")
     mask_region= fmask(f'mask_{region_name}')
     # Now I used the NYS mask and land mask to filter the decadal mean solar and wind CFs;
     # Note that both scf and wcf are 2D array because we did the time average: (lat, lon)
     # The returned array (scf_region, wcf_region) conains decadal mean values of solar/wind CFs for NYS and over land only; 
 
+    results[region_name] = {}
     # If I want all grids of NYS: selection_method = 1
     # If I want grids above the thresholds (note that you can change the threshold youself): selection_method = 2
     # If I want grids that have the top X% largest values (note that you can change the threshold youself): selection_method = 3
     for i in [ 1, 2, 3]:
     #selection_method = 1
-        make_grid_cell_selections(scf, wcf, mask_region, land_mask, i, region_name, g)
+        results[region_name][i] = make_grid_cell_selections(scf, wcf, mask_region, land_mask, i, region_name, g)
 
 
 print("\nSaving masks to:")
 print(g)
 g.close()
+
+
+
+
+
+
+#---------------------------------------------
+# Below for plotting results if you care
+# Motivated by Muriel Hauser's code
+#---------------------------------------------
+
+
+plot_masks = True
+if not plot_masks:
+    exit()
+
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+from matplotlib import pyplot as plt
+import os
+
+if not os.path.exists('plots'):
+    os.makedirs('plots')
+
+def plot_region(mask_region, save_name, extent=[-150,-50, 10, 80]):
+    plt.close()
+    print(save_name)
+    ax = plt.subplot(111, projection = ccrs.PlateCarree())
+    ax.set_global()
+    ax.add_feature(cfeature.COASTLINE)
+    ax.add_feature(cfeature.STATES)
+    
+    im = ax.pcolormesh( lon, lat, mask_region, transform=ccrs.PlateCarree() )
+    cbar = ax.figure.colorbar(im)
+    name = "resource annual capacity factors" if '_1_' in save_name else "selected region"
+    cbar.ax.set_ylabel(name)
+    
+    ax.set_extent(extent)
+    
+    plt.savefig(f'plots/{save_name}.png')
+
+extents = {
+        'default' : [-150,-50, 10, 80], # Good CONUS window
+        'NYS' : [-85,-60, 35, 50],
+        'NYIS_2018' : [-85,-60, 35, 50],
+        'PJM_2018' : [-95,-65, 30, 45],
+        'TEX' : [-110, -85, 20, 40],
+        'TI' : [-110, -85, 20, 40],
+        'ERCO_2018' : [-110, -85, 20, 40],
+        }
+
+for region_name in ['NYS', 'TEX',]:# 'NYIS_2018', 'TI', 'ERCO_2018', 'PJM_2018']:
+
+    print(region_name)
+
+    mask_region = fmask(f'mask_{region_name}')
+    plot_region(mask_region, f'{region_name}_full_region', extents[region_name])
+
+    for mthd in [1, 2, 3]:
+        plot_region(results[region_name][mthd][0], f'{region_name}_{mthd}_solar', extents[region_name])
+        plot_region(results[region_name][mthd][1], f'{region_name}_{mthd}_wind', extents[region_name])
+
+
+
+
 fmask.close()
