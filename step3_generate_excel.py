@@ -33,13 +33,18 @@ data_path = sys.argv[1]
 info = data_path.strip('/').split('/')
 f_dir = info[-1]
 info = f_dir.split('_')
-region = info[-2]
 method = info[-1]
+date = info[0]
+if len(info) == 3:
+    region = info[-2]
+if len(info) == 4:
+    region = '_'.join([info[1], info[2]])
 nc_out = '_'.join([region, method])
 
 
 print(f"\nRegion: {region}")
 print(f"Selection method: {method}")
+print(f"Processing date: {date}")
 print(f".nc obj name: {nc_out}")
 print(f"Data path: {data_path}")
 
@@ -132,5 +137,5 @@ def make_MEM_compatible(df, save_name, cfs_var):
                 now_year = mem_format.year
     print(f"Outfile: {save_name}.csv")
 
-make_MEM_compatible(master, f"{region}_{method}_{str(min_year)}-{str(max_year)}_solar", "s_cfs")
-make_MEM_compatible(master, f"{region}_{method}_{str(min_year)}-{str(max_year)}_wind", "w_cfs")
+make_MEM_compatible(master, f"{date}_{region}_{method}_{str(min_year)}-{str(max_year)}_solar", "s_cfs")
+make_MEM_compatible(master, f"{date}_{region}_{method}_{str(min_year)}-{str(max_year)}_wind", "w_cfs")
