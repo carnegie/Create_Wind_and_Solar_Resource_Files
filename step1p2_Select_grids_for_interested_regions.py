@@ -69,8 +69,9 @@ def select_CF(sCF, wCF, idx, *i):
         masked_wCF = set_axes( MV.masked_less(wCF,w_thresholds)*0.+1 )
         s_avg_tmp = cdutil.averager(masked_sCF*sCF,axis='yx')
         w_avg_tmp = cdutil.averager(masked_wCF*wCF,axis='yx')
-    print (f"For method {idx}, averaged solar capacity factor for the filtered grids is: {s_avg_tmp}")
-    print (f"For method {idx}, averaged wind capacity factor for the filtered grids is: {w_avg_tmp}")
+    print(f"For method {idx}, averaged solar capacity factor for the filtered grids is: {s_avg_tmp}")
+    print(f"For method {idx}, averaged wind capacity factor for the filtered grids is: {w_avg_tmp}")
+    print(f"Selected grid cells solar {np.ceil(masked_sCF).sum()}\nSelected grid cells wind {np.ceil(masked_wCF).sum()}")
     return masked_sCF, masked_wCF
 
 
