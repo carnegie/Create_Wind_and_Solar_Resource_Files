@@ -30,8 +30,8 @@ def set_axes(var):
 # Note that this is based on annual mean (or decadal mean) capacity factor;
 def select_CF(sCF, wCF, idx, *i):
     if idx == 1.:
-        masked_sCF = sCF
-        masked_wCF = wCF
+        masked_sCF = np.ceil(sCF)
+        masked_wCF = np.ceil(wCF)
         s_avg_tmp = cdutil.averager(sCF,axis='yx')
         w_avg_tmp = cdutil.averager(wCF,axis='yx')
     elif idx == 2.:
