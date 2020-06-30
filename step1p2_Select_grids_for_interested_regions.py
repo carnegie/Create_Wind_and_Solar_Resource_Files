@@ -108,7 +108,9 @@ def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method
     # Now write these two mask variables to a NetCDF file for further use
     out_file.write(s_mask_region)
     out_file.write(w_mask_region)
-    return s_mask_region, w_mask_region
+
+    # Return the selected masks, and the decadal mean CFs for the selected region
+    return s_mask_region, w_mask_region, scf_region * s_mask_region, wcf_region * w_mask_region
 
 
 ### Step 2
@@ -170,7 +172,7 @@ def plot_region(lon, lat, mask_region, save_name, extent=[-150,-50, 10, 80]):
     
     im = ax.pcolormesh( lon, lat, mask_region, transform=ccrs.PlateCarree() )
     cbar = ax.figure.colorbar(im)
-    name = "resource annual capacity factors" if '_1_' in save_name else "selected region"
+    name = "resource annual capacity factors" if '_weighted' in save_name else "selected region"
     cbar.ax.set_ylabel(name)
     
     ax.set_extent(extent)
@@ -203,9 +205,13 @@ for region_name in ['NYS', 'TEX',]:# 'NYIS_2018', 'TI', 'ERCO_2018', 'PJM_2018']
     plot_region(plot_shifted_lon, plot_shifted_lat, mask_region, f'{region_name}_full_region', extents[region_name])
 
     for mthd in [1, 2, 3]:
-        plot_region(plot_shifted_lon, plot_shifted_lat, results[region_name][mthd][0], f'{region_name}_{mthd}_solar', extents[region_name])
-        plot_region(plot_shifted_lon, plot_shifted_lat, results[region_name][mthd][1], f'{region_name}_{mthd}_wind', extents[region_name])
+        # Plot the selected region
+        plot_region(plot_shifted_lon, plot_shifted_lat, results[region_name][mthd][0], f'{region_name}_{mthd}_solar_selected', extents[region_name])
+        plot_region(plot_shifted_lon, plot_shifted_lat, results[region_name][mthd][1], f'{region_name}_{mthd}_wind_selected', extents[region_name])
 
+        # Plot the decadal mean resources for the selected region
+        plot_region(plot_shifted_lon, plot_shifted_lat, results[region_name][mthd][2], f'{region_name}_{mthd}_solar_weighted', extents[region_name])
+        plot_region(plot_shifted_lon, plot_shifted_lat, results[region_name][mthd][3], f'{region_name}_{mthd}_wind_weighted', extents[region_name])
 
 
 
