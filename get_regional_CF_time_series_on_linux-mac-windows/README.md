@@ -20,6 +20,7 @@
 #### Packages required run these scripts
 
 The only python packages required to run these scripts are `xarray`, which is already available on MEMEX or can be easily installed on any OS, and `regionmask`, which can also be easily installed through conda on any OS.
+
     * `>> conda install xarray regionmask`
 
 
