@@ -4,6 +4,9 @@ A repository to collect the work of Caldeira Lab postdocs for generating wind an
 The code within is heavily based off of work done by Lei Duan: https://github.com/LDuan3008. Many thanks to him and Muriel Hauser
 for preparing this code for uploading.
 
+## Resources
+Lei created a screen cast showing how to use the step1 and step2 scripts in the `get_regional_CF_time_series_on_linux-mac` directory: https://drive.google.com/file/d/13_TprW7_wJt0_rK0skIyIdh33s1jwpBp/view?usp=sharing
+
 
 ## Methodology
 
