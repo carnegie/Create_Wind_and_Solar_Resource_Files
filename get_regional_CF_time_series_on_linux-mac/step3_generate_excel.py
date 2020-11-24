@@ -84,7 +84,7 @@ print(f"\nFrom the list found the min and max years: {min_year}, {max_year}")
 
 def get_file_by_year(files, year):
     for f in files:
-        if str(year) in f:
+        if str(year) in f and str(year) == f[-7:-3]:
             return f
     print(f"No files found for year {year}")
 
