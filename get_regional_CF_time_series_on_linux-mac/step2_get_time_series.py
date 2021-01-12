@@ -51,7 +51,7 @@ else:
     leap_year = 0
 
 # Gat lat/lon info
-f_mask = cdms.open('data/SWGDN.nc')
+f_mask = cdms.open('../data/SWGDN.nc')
 v=f_mask('SWGDN')
 lat=v.getAxis(1)
 lon=v.getAxis(2)
