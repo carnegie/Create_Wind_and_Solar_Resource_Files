@@ -16,3 +16,4 @@ For the technical details of the calculations please see `Methodology.md`.
 
 The folder examples_MERRA2 includes codes and data that provide as an example to generate capacity factor input using MERRA-2. 
 
+The folder example includes some revised codes to generate time series capacity factor inputs with ERA5
