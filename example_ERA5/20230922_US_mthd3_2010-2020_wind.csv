@@ -1,4 +1,4 @@
-Capacity data calculated from MERRA-2
+Capacity data calculated from ERA5
 ""
 BEGIN_DATA
 year,month,day,hour,w_cfs
