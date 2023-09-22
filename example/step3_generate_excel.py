@@ -10,6 +10,10 @@ import pandas as pd
 import datetime
 
 
+# Lei added here
+# To correct one-hour lag for ERA5
+hour_lag = 1
+
 
 # Run this code like:
 # python step3_generate_excel.py outfiles/20200623v9_TEX_mthd3/
@@ -57,34 +61,35 @@ files.sort()
 s_files = []
 w_files = []
 for f in files:
-    print(f)
     if 'scf' in f:
         s_files.append(f)
     if 'wcf' in f:
         w_files.append(f)
 
 
-
 # Get year range from the output files
 min_year = 9999
 max_year = -9999
 for f in files:
+    print('-------', f)
     tmp = f.strip(data_path)
     tmp = tmp.replace('.nc', '')
+    if tmp[-1] == '.': tmp = tmp[:-1]
     info = tmp.split('_')
-    yr = info[-2]
+    # yr = info[-1] 
+    yr = info[-2] 
     yr = int(yr.replace('scf','').replace('wcf',''))
-    if yr < min_year:
+    if yr < min_year: 
         min_year = yr
     if yr > max_year:
         max_year = yr
 print(f"\nFrom the list found the min and max years: {min_year}, {max_year}")
 
 
-
+# """
 def get_file_by_year(files, year):
     for f in files:
-        if str(year) in f:
+        if str(year) in f and str(year) == f[-12:-8]:
             return f
     print(f"No files found for year {year}")
 
@@ -112,11 +117,24 @@ for yr in range(min_year, max_year+1):
 print("Generated dateframe")
 print(master)
 
+
 print("Now covert to MEM time stamps")
 
 def make_MEM_compatible(df, save_name, cfs_var):
 
     with open(f'{save_name}.csv', 'w', newline='') as csvfile:
+
+        Description_line = ['Capacity data calculated from MERRA-2']
+        writer = csv.DictWriter(csvfile, fieldnames=Description_line)
+        writer.writeheader()
+
+        Blank_line = ['']
+        writer = csv.DictWriter(csvfile, fieldnames=Blank_line)
+        writer.writeheader()
+
+        Begin_line = ['BEGIN_DATA']
+        writer = csv.DictWriter(csvfile, fieldnames=Begin_line)
+        writer.writeheader()
 
         fieldnames = ['year', 'month', 'day', 'hour', cfs_var]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -124,18 +142,22 @@ def make_MEM_compatible(df, save_name, cfs_var):
 
         now_year = 0
         for i in range(len(df.index)):
+            j = i+1 
+            j = j if j < len(df.index) else 0
             mem_format = df.iloc[i]['date_time'] + datetime.timedelta(hours=-1)
             writer.writerow({
                 'year': mem_format.year,
                 'month': mem_format.month,
                 'day': mem_format.day,
                 'hour': mem_format.hour+1,
-                cfs_var: df.iloc[i][cfs_var],
+                cfs_var: df.iloc[j][cfs_var],
             })
             if mem_format.year != now_year:
                 print(f"Processing {mem_format.year}")
                 now_year = mem_format.year
     print(f"Outfile: {save_name}.csv")
 
-make_MEM_compatible(master, f"{date}_{region}_{method}_{str(min_year)}-{str(max_year)}_solar", "s_cfs")
-make_MEM_compatible(master, f"{date}_{region}_{method}_{str(min_year)}-{str(max_year)}_wind", "w_cfs")
+date_new = 20230922
+make_MEM_compatible(master, f"{date_new}_{region}_{method}_{str(min_year)}-{str(max_year)}_solar", "s_cfs")
+make_MEM_compatible(master, f"{date_new}_{region}_{method}_{str(min_year)}-{str(max_year)}_wind", "w_cfs")
+# """

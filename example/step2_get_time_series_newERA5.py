@@ -26,18 +26,19 @@ if source == 'ERA5':
         print ('Dealing only ERA5 with ERA5 mask only')
         stop 
     if mask == 'ERA5':
-        data_patch = '/lustre/scratch/leiduan/MERRA2_data/ERA5_CF_Data/orginal_resolution/'
+        data_patch = '/groups/carnegie_poc/leiduan_memex/lustre_scratch/MERRA2_data/ERA5/ERA5_CF_Data/orginal_resolution/'
         app = 'SolarCFs_ERA5_' if scf_or_wcf == 'scf' else 'WindCFs_ERA5_'
         pre = 's' if scf_or_wcf == 'scf' else 'w'
-        f_mask = cdms.open('/lustre/scratch/leiduan/MERRA2_data/generate_CF/CtyMasks_AdvancedNuclear/data/ERA5_landsea_mask.nc')
+        f_mask = cdms.open('/groups/carnegie_poc/leiduan_memex/lustre_scratch/MERRA2_data/ERA5_landsea_mask.nc')
         v = f_mask('lsm', squeeze=1)[0]
         lat = v.getAxis(0)
         lon = v.getAxis(1)
-        f_mask.close()
+        f_mask.close() 
         case_name = [] 
         for month_idx in np.arange(1, 13, 1):
             case_name.append(app + str(year) + '_' + str(month_idx) + '_Org.nc')
-        fm = cdms.open('selected_USmask_outfile_ERA5.nc')
+        # fm = cdms.open('recreateWrong_selected_USmask_outfile_ERA5.nc')
+        fm = cdms.open('step1p2_selected_USmask_outfile_ERA5.nc')
 
 
 # Region to do list and correspondiing mask file:
