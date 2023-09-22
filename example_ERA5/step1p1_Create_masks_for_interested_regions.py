@@ -37,7 +37,7 @@ output_file_name = 'selected_CtyMasks_ERA5.nc'
 
 
 # ------------------------------------------------------------------------
-"""
+# """
 # Get US masks
 countries = regionmask.defined_regions.natural_earth_v5_0_0.countries_110
 mask = np.array(countries.mask(lon, lat, wrap_lon=True))
@@ -75,7 +75,7 @@ g.close()
 
 
 
-# """
+"""
 # Plot and see
 import matplotlib.pyplot as plt 
 import cartopy.crs as ccrs
