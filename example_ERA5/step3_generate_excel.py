@@ -124,7 +124,7 @@ def make_MEM_compatible(df, save_name, cfs_var):
 
     with open(f'{save_name}.csv', 'w', newline='') as csvfile:
 
-        Description_line = ['Capacity data calculated from ERA5']
+        Description_line = ['Capacity data calculated from MERRA-2']
         writer = csv.DictWriter(csvfile, fieldnames=Description_line)
         writer.writeheader()
 
