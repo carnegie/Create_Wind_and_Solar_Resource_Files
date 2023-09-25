@@ -32,7 +32,7 @@ from Get_Info import get_info
 
 if len(sys.argv) == 1:
     print ('Please give the following arguments: year source month')
-    sys.eixt() 
+    sys.exit() 
 else:
     year, source, month_list = sys.argv[1], sys.argv[2], [int(sys.argv[3])]
 
@@ -60,7 +60,7 @@ if source == "MERRA_2":
     lat_num = len(lat[:])
     lon_num = len(lon[:])
 elif source == "ERA5":
-    fmask = cdms.open('./ERA5_landsea_mask.nc')
+    fmask = cdms.open('../example_ERA5/data/ERA5_landsea_mask.nc')
     lsm = fmask('lsm', squeeze=1)
     lat = fmask.getAxis('latitude')
     lon = fmask.getAxis('longitude')
@@ -100,7 +100,7 @@ F21 = {1:-0.060, 2:-0.019, 3: 0.055, 4: 0.109, 5: 0.226, 6: 0.288, 7: 0.264, 8: 
 F22 = {1: 0.072, 2: 0.066, 3:-0.064, 4:-0.152, 5:-0.462, 6:-0.823, 7:-1.127, 8:-1.377 }
 F23 = {1:-0.022, 2:-0.029, 3:-0.026, 4:-0.014, 5: 0.001, 6: 0.056, 7: 0.131, 8: 0.251 }
 
-# Careful with the defition of sign
+# Careful with the definition of sign
 def cal_solar_angles(lat, lon, year, month, days, hr_idx, hr_idx_adjust, days_ord):
     lat_radius = np.array(lat) * degree_to_radius
     lat_use = np.ones([lat_num,lon_num]) * lat_radius[:,None]
