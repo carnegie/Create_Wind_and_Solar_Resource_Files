@@ -4,6 +4,8 @@ This folder includes the example data and scripts that can be used to generate i
 
 Using scripts in `get_gridded_CF`, we have converted the orignal climate data into capacity factors at each grid cell level. For each study that focused on a specific region, it is the overall capacity factor for that region that is interested. Therefore, the following steps are used to select grid cells for the interested region, average grid cells for those regions, and then covert the final outputs into CSV table. 
 
+In other words, before running codes in this folder, you should first download the ERA5 data and then run scripts in get_gridde_CF to convert the original ERA5 climate data into grid-scale capacity factor data. 
+
 ### Generate US mask
 
 Run the following script to generate US mask:
