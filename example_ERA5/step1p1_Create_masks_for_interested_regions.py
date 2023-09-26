@@ -1,24 +1,7 @@
-import cdms2 as cdms
 import numpy as np
-import MV2 as MV
 import geopandas as gpd, regionmask
-
-# ------------------------------------------------------------------------
-# # When using MERRA2:
-# f_axis = cdms.open('data/SWGDN.nc')
-# v=f_axis('SWGDN')
-# lat=v.getAxis(1)  # latitude
-# lon=v.getAxis(2)  # longitude
-# f_axis.close()
-# output_file_name = 'selected_CtyMasks_MERRA2.nc'
-
-# f_land_mask = cdms.open('data/land_sea_mask_merra.nc4')
-# land_mask_tmp = f_land_mask('FRLAND',squeeze=1)
-# land_mask_tmp[land_mask_tmp>=0.5] = 1.
-# land_mask_tmp[land_mask_tmp<0.5]  = 0.
-# land_mask = MV.array(MV.masked_equal(land_mask_tmp,0.))
-# land_mask.setAxis(0,lat);      land_mask.setAxis(1,lon)
-# f_land_mask.close()
+import cdms2 as cdms
+import MV2 as MV
 
 
 # When using ERA5:
@@ -72,38 +55,3 @@ g.write(US_mask)
 g.close() 
 # """
 
-
-
-
-# """
-# Plot and see
-import matplotlib.pyplot as plt 
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
-import matplotlib.colors as colors
-import matplotlib as mpl
-from matplotlib.colors import LinearSegmentedColormap
-import matplotlib.path as mpath
-
-# g=cdms.open('step1p1_selected_masks_US.nc')
-# a = g('mask_US', squeeze=1)
-# g.close() 
-
-g=cdms.open('step1p2_selected_USmask_outfile_ERA5.nc')
-a = g('smask_US_mthd1', squeeze=1)
-g.close() 
-
-print (a)
-print (a.min())
-print (a.max())
-
-ax1 = plt.subplot(111, projection=ccrs.PlateCarree())
-ax1.add_feature(cfeature.COASTLINE)
-# ax1.add_feature(cfeature.BORDERS)
-# ax1.set_extent([-180, 180, -90, 90], crs=ccrs.PlateCarree())
-ax1.add_feature(cfeature.STATES); ax1.set_extent([-150, -60, 20, 60], crs=ccrs.PlateCarree()); name = 'US_scale'
-mp = ax1.pcolor(lon, lat, a, cmap='Greens', norm=colors.Normalize(vmin=0, vmax=1), transform=ccrs.PlateCarree())
-plt.colorbar(mp, ax=ax1, extend='max', shrink=0.5, orientation='vertical')
-plt.show()
-plt.clf()
-# """

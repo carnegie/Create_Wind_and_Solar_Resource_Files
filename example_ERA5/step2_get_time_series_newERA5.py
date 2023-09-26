@@ -8,7 +8,7 @@ print(sys.argv[0])
 print("Input arg list")
 print(sys.argv)
 
-# Default year is 2016 when no year info is provided
+# Default year is 2019 when no year info is provided
 year = 2019 if len(sys.argv) <= 1 else int(sys.argv[1])
 region = 'US' if len(sys.argv) <= 2 else sys.argv[2]
 mthd = 1 if len(sys.argv) <= 3 else int(sys.argv[3])

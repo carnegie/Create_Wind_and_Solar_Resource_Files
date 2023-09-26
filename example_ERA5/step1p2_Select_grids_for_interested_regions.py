@@ -6,44 +6,6 @@ import numpy as np
 
 
 # ------------------------------------------------------------------------
-"""
-# # MERRA2
-# # Again, get lat/lon information
-# from helpers import get_prefix_name
-# f_axis = cdms.open('data/SWGDN.nc')
-# v=f_axis('SWGDN')
-# lat=v.getAxis(1) 
-# lon=v.getAxis(2)
-# f_axis.close()  
-
-# f_land_mask = cdms.open('data/land_sea_mask_merra.nc4')
-# land_mask_tmp = f_land_mask('FRLAND',squeeze=1)
-# land_mask_tmp[land_mask_tmp>=0.5] = 1.
-# land_mask_tmp[land_mask_tmp<0.5]  = 0.
-# land_mask = MV.array(MV.masked_equal(land_mask_tmp,0.))
-# land_mask.setAxis(0,lat);      land_mask.setAxis(1,lon)
-# f_land_mask.close()
-
-data_path = 'data/solar_wind_annual_data/'
-start_year = 2009
-n_years = 10
-scf = np.zeros([len(lat), len(lon)])
-wcf = np.zeros([len(lat), len(lon)])
-for i in range(n_years):
-    year = i + start_year
-    solar_file_name = get_prefix_name(year, True)
-    wind_file_name = get_prefix_name(year, False)
-    sf = cdms.open(f"{data_path}{solar_file_name}{str(year)}_scf_annual.nc")
-    # sf = cdms.open(f"{data_path}SolarCFs_2a_Annual_{str(year)}.nc")
-    wf = cdms.open(f"{data_path}{wind_file_name}{str(year)}_wcf100m031225_annual.nc")
-    scf = scf + sf('scf_annual')/float(n_years)
-    wcf = wcf + wf('wcf_annual')/float(n_years)
-    sf.close()
-    wf.close()
-# """
-
-
-
 
 # ERA5
 fmask = cdms.open('data/ERA5_landsea_mask.nc')
@@ -194,3 +156,4 @@ print("\nSaving masks to:")
 print(g)
 g.close()
 fmask.close 
+

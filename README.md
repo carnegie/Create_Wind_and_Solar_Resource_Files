@@ -7,13 +7,15 @@ A repository for generating wind and solar capacity factor files for use in ener
 We recommend using the conda package manager to install the required packages. If you do not have conda installed, you can download it [here](https://docs.conda.io/en/latest/miniconda.html).
 
 1. Clone the repository to your local machine.
-```git clone Create_Wind_and_Solar_Resource_Files```
+```git clone https://github.com/carnegie/Create_Wind_and_Solar_Resource_Files.git```
 
 2. cd into the repository.
 ```cd Create_Wind_and_Solar_Resource_Files```
 
-3. Create a conda environment with the required packages and activate it.
-```conda env create -f env.yml```
+3. Create a conda environment with the required packages and activate it:
+
+```conda env create -f env.yaml```
+
 ```conda activate capacity_factors_env```
 
 
