@@ -17,8 +17,8 @@ def get_prefix_name(year):
 def get_info(source, year):
     info = {}
     if source == "MERRA_2":
-        info['data_path_wind'] = "/lustre/scratch/leiduan/MERRA2_data/MERRA2_original_data/Wind/"
-        info['data_path_solar'] = "/lustre/scratch/leiduan/MERRA2_data/MERRA2_original_data/Solar/"
+        info['data_path_wind'] = "/groups/carnegie_poc/leiduan_memex/lustre_scratch/MERRA2_data/MERRA2_original_data/Wind/"
+        info['data_path_solar'] = "/groups/carnegie_poc/leiduan_memex/lustre_scratch/MERRA2_data/MERRA2_original_data/Solar/"
         info['case_name'] = get_prefix_name(int(year))
         info['isleap'] = calendar.isleap(int(year))
         info['lat_num'] = 361
@@ -28,7 +28,7 @@ def get_info(source, year):
         info['day_start'] = -6
         info['day_end'] = -4
     if source == "ERA5":
-        info['data_path'] = "/lustre/scratch/leiduan/MERRA2_data/ERA5_original_data/"
+        info['data_path'] = "/groups/carnegie_poc/leiduan_memex/lustre_scratch/MERRA2_data/ERA5/ERA5_original_data/transfer/"
         info['case_name'] = f'ERA5_{year}_'
         info['isleap'] = calendar.isleap(int(year))
         info['lat_num'] = 721
@@ -42,7 +42,7 @@ def get_info(source, year):
 def get_info_water(source, year):
     info = {}
     if source == "ERA5":
-        info['data_path'] = "/lustre/scratch/leiduan/MERRA2_data/ERA5_original_data/"
+        info['data_path'] = "/groups/carnegie_poc/leiduan_memex/lustre_scratch/MERRA2_data/ERA5/ERA5_original_data/transfer/"
         info['case_name'] = f'ERA5_water_{year}_'
         info['isleap'] = calendar.isleap(int(year))
         info['lat_num'] = 721

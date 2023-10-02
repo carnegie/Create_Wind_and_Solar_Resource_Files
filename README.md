@@ -1,28 +1,33 @@
-# Create_Wind_and_Solar_Resource_Files
-A repository to collect the work of Caldeira Lab postdocs for generating wind and solar capacity factor files for using in MEM.
+# Create Wind and Solar Resource Files
 
-The code within is heavily based off of work done by Lei Duan: https://github.com/LDuan3008. Many thanks to him and Muriel Hauser for preparing this code for uploading.
+A repository for generating wind and solar capacity factor files for use in energy system models.
+
+## Installation and setup
+
+We recommend using the conda package manager to install the required packages. If you do not have conda installed, you can download it [here](https://docs.conda.io/en/latest/miniconda.html).
+
+1. Clone the repository to your local machine.
+```git clone https://github.com/carnegie/Create_Wind_and_Solar_Resource_Files.git```
+
+2. cd into the repository.
+```cd Create_Wind_and_Solar_Resource_Files```
+
+3. Create a conda environment with the required packages and activate it:
+
+```conda env create -f env.yaml```
+
+```conda activate capacity_factors_env```
 
 
-## Methodology that converts climate variables into capacity factors
+## Converting climate variables into capacity factors
 
-The Python codes that we used to convert climate inputs (radiation, wind speed, temperature, etc) to capacity factor at grid cell level are stored in the `get_gridded_CF` folder. 
+First, climate inputs (radiation, wind speed, temperature, etc) are converted to capacity factors at grid cell level with scripts in the `get_gridded_CF` directory (see `README.md` in that directory for more information). 
 
 For the technical details of the calculations please see `Methodology.md`.
 
 
-## An example to generate capacity factor inputs 
+## Generating capacity factor input files for specific regions
 
-We have two example folder here: 
+Next, the capacity factor files are aggregated to the regions of interest with scripts in the `examples_ERA5` directory for ERA5 based capacity factors (see `README.md` in that directory for more information).
 
-`examples_MERRA2` includes codes and data that provide as an example to generate capacity factor input using MERRA-2. 
-
-`examples_ERA5` includes codes and data that provide as an example to generate capacity factor input using ERA5. 
-
-In the more recent works, we have swithed to ERA5 from MERRA-2, so here we focus on describing steps to generate the final input files used for ERA5. The whole process is similar for MERRA-2.
-
-See `README.md` under `example_ERA5` for more infomration. 
-
-
-
-Updated by Lei on Sep 22, 2023 
+Similarly, region specific capacity factors based on MERRA-2 can be obtained by carrying out analogous steps in the `examples_MERRA2` directory. 

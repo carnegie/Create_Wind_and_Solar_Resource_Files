@@ -111,7 +111,7 @@ for yr in range(min_year, max_year+1):
         master = df
         first = False
     else:
-        master = master.append(df)
+        master = pd.concat([master, df])
     print(f"Year {yr}, length of df {len(master.index)}")
 
 print("Generated dateframe")

@@ -14,6 +14,7 @@ from Get_Info import get_info
 
 if len(sys.argv) == 1:
     print ('Please give the following arguments: year source')
+    sys.exit() 
 else:
     year = sys.argv[1]
     source = sys.argv[2]
@@ -41,7 +42,7 @@ if source == "MERRA_2":
     lat_num = len(lat[:])
     lon_num = len(lon[:])
 elif source == "ERA5":
-    fmask = cdms.open('./ERA5_landsea_mask.nc')
+    fmask = cdms.open('../example_ERA5/data/ERA5_landsea_mask.nc')
     lsm = fmask('lsm', squeeze=1)
     lat = fmask.getAxis('latitude')
     lon = fmask.getAxis('longitude')
