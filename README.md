@@ -31,3 +31,5 @@ For the technical details of the calculations please see `Methodology.md`.
 Next, the capacity factor files are aggregated to the regions of interest with scripts in the `examples_ERA5` directory for ERA5 based capacity factors (see `README.md` in that directory for more information).
 
 Similarly, region specific capacity factors based on MERRA-2 can be obtained by carrying out analogous steps in the `examples_MERRA2` directory. 
+
+[![DOI](https://www.zenodo.org/badge/272541726.svg)](https://www.zenodo.org/badge/latestdoi/272541726)
