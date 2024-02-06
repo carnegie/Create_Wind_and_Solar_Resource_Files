@@ -1,0 +1,20 @@
+
+Running 
+step2_get_time_series_newERA5.py
+Input arg list
+['step2_get_time_series_newERA5.py']
+Traceback (most recent call last):
+  File "/carnegie/nobackup/scratch/jdowling/Create_Wind_and_Solar_Resource_Files/example_ERA5/step2_get_time_series_newERA5.py", line 49, in <module>
+    region_mask = pre+'mask_%s_mthd%i' % (region, mthd)
+NameError: name 'pre' is not defined
+
+Running 
+step2_get_time_series_newERA5.py
+Input arg list
+['step2_get_time_series_newERA5.py', '2018', 'US', '3', '20230925', 'scf', 'ERA5', 'ERA5']
+Traceback (most recent call last):
+  File "/carnegie/nobackup/scratch/jdowling/Create_Wind_and_Solar_Resource_Files/example_ERA5/step2_get_time_series_newERA5.py", line 32, in <module>
+    f_mask = cdms.open('/groups/carnegie_poc/leiduan_memex/lustre_scratch/MERRA2_data/ERA5_landsea_mask.nc')
+  File "/home/jdowling/miniconda3/envs/capacity_factors_env/lib/python3.10/site-packages/cdms2/dataset.py", line 514, in openDataset
+    raise FileNotFoundError(path)
+FileNotFoundError: /groups/carnegie_poc/leiduan_memex/lustre_scratch/MERRA2_data/ERA5_landsea_mask.nc
