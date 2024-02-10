@@ -1,5 +1,6 @@
 import cdms2 as cdms
 import MV2 as MV
+import sys
 import cdutil
 import numpy as np
 
@@ -7,9 +8,25 @@ import numpy as np
 
 # ------------------------------------------------------------------------
 
-# ERA5
-fmask = cdms.open('data/ERA5_landsea_mask.nc')
-land_mask_tmp = fmask('lsm', squeeze=1)[0]
+# 'ERA5' or 'MERRA2'
+weather_data = 'MERRA2'
+
+# When using ERA5:
+if weather_data == 'ERA5':
+    fmask = cdms.open('data/ERA5_landsea_mask.nc')
+    land_mask_tmp = fmask('lsm', squeeze=1)[0]
+    data_path = '/carnegie/nobackup/scratch/Climate_Energy_Lab/CFs/ERA5_Org/'
+
+# When using MERRA2:
+elif weather_data == 'MERRA2':
+    fmask = cdms.open('../example_MERRA2/data/land_sea_mask_merra.nc4')
+    land_mask_tmp = fmask('FRLAND',squeeze=1)
+    data_path = '/carnegie/nobackup/scratch/Climate_Energy_Lab/CFs/MERRA2/'
+
+else:
+    print(f"Data source {weather_data} not recognized, aborting.")
+    sys.exit()
+
 lat = land_mask_tmp.getAxis(0)
 lon = land_mask_tmp.getAxis(1)
 fmask.close()
@@ -22,19 +39,31 @@ ocean_mask = (MV.filled(land_mask_tmp, 0) - 1) * -1
 ocean_mask = MV.array(MV.masked_equal(ocean_mask,0.)) * 0 + 1
 ocean_mask.setAxis(0,lat);      ocean_mask.setAxis(1,lon)
 
-data_path = 'data/solar_wind_annual_data_ERA5/'
-start_year = 2011
-n_years = 10
+start_year = 2018
+n_years = 1
 scf = np.zeros([len(lat), len(lon)])
 wcf = np.zeros([len(lat), len(lon)])
 for i in range(n_years):
     year = i + start_year
-    # file_name = f'Annual_ERA5_{year}_12.nc'
-    file_name = f'Annual_ERA5_{year}_12_Org.nc'
-    file_open = cdms.open(f'{data_path}{file_name}')
-    scf = scf + file_open('annual_scf')/float(n_years)
-    wcf = wcf + file_open('annual_wcf')/float(n_years)
-    file_open.close()
+    if weather_data == 'ERA5':
+        file_name = f'Annual_ERA5_{year}_12_Org.nc'
+        file_open = cdms.open(f'{data_path}{file_name}')
+        scf = scf + file_open('annual_scf')/float(n_years)
+        wcf = wcf + file_open('annual_wcf')/float(n_years)
+        file_open.close()
+
+    else:
+        filen_name_scf = f'SolarCFs_Annual_{year}.nc'
+        file_name_wcf = f'WindCFs_Annual_{year}.nc'
+        scf_file_open = cdms.open(f'{data_path}{filen_name_scf}')
+        wcf_file_open = cdms.open(f'{data_path}{file_name_wcf}')
+        scf = scf + scf_file_open('scf_annual')/float(n_years)
+        wcf = wcf + wcf_file_open('wcf_annual')/float(n_years)
+        scf_file_open.close()
+        wcf_file_open.close()
+
+
+
 
 
 
@@ -140,14 +169,15 @@ def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method
 
 
 # ------------------------------------------------------------------------
-# For US 
-TwoLettersCode = ['US']
-# fmask=cdms.open(f'selected_CtyMasks_ERA5.nc')
-fmask=cdms.open(f'step1p1_selected_masks_US.nc')
-g=cdms.open(f'step1p2_selected_USmask_outfile_ERA5.nc','w') 
+# For US or ISO regions
+LetterCode = ['CISO']#, 'MISO', 'ERCOT', 'ISNE']#, 'US']
+
+
 results = {}
-for region_name in TwoLettersCode:
+for region_name in LetterCode:
     print(f"REGION: {region_name}")
+    fmask=cdms.open(f'step1p1_selected_masks_{region_name}.nc')
+    g=cdms.open(f'step1p2_selected_{region_name}mask_outfile_{weather_data}.nc','w') 
     mask_region= fmask(f'mask_{region_name}')
     results[region_name] = {}
     for i in [ 1, 3]:
