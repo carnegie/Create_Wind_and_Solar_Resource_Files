@@ -148,8 +148,6 @@ def redo_loop(sCF, wCF, idx, *i):
         summary_array[0] = list_i
         summary_array[1] = list_s
         summary_array[2] = list_w
-        # np.savetxt('Sara_list.csv', summary_array.T, delimiter=',', fmt='%.3f')
-        # print (summary_array) 
         stop 
 
 
@@ -170,14 +168,18 @@ def make_grid_cell_selections(scf, wcf, region_mask, land_mask, selection_method
 
 # ------------------------------------------------------------------------
 # For US or ISO regions
-LetterCode = ['CISO']#, 'MISO', 'ERCOT', 'ISNE']#, 'US']
-
+# LetterCode = ['US']
+LetterCode = ['CISO', 'MISO', 'ERCOT', 'ISNE']
+outpath = 'create_ISO_files/'
 
 results = {}
 for region_name in LetterCode:
+    if region_name == 'US':
+        outpath = ''
+
     print(f"REGION: {region_name}")
-    fmask=cdms.open(f'step1p1_selected_masks_{region_name}.nc')
-    g=cdms.open(f'step1p2_selected_{region_name}mask_outfile_{weather_data}.nc','w') 
+    fmask=cdms.open(outpath + f'step1p1_selected_masks_{region_name}.nc')
+    g=cdms.open(outpath + f'step1p2_selected_{region_name}mask_outfile_{weather_data}.nc','w') 
     mask_region= fmask(f'mask_{region_name}')
     results[region_name] = {}
     for i in [ 1, 3]:

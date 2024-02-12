@@ -55,7 +55,11 @@ lat = v.getAxis(0)
 lon = v.getAxis(1)
 f_mask.close() 
 
-fm = cdms.open(f'step1p2_selected_{region}mask_outfile_{source}.nc')
+if region == 'US':
+    outpath = ''
+else:
+    outpath = 'create_ISO_files/'
+fm = cdms.open(outpath + f'step1p2_selected_{region}mask_outfile_{source}.nc')
 
 
 # Region to do list and corresponding mask file:

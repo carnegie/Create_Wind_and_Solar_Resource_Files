@@ -89,7 +89,8 @@ print(f"\nFrom the list found the min and max years: {min_year}, {max_year}")
 # """
 def get_file_by_year(files, year):
     for f in files:
-        if str(year) in f and str(year) == f[-12:-8]:
+        year_filename = f.split('_')[-2].replace('scf','').replace('wcf','')
+        if str(year) in f and str(year) == year_filename:
             return f
     print(f"No files found for year {year}")
 
@@ -157,7 +158,6 @@ def make_MEM_compatible(df, save_name, cfs_var):
                 now_year = mem_format.year
     print(f"Outfile: {save_name}.csv")
 
-date_new = 20230922
-make_MEM_compatible(master, f"{date_new}_{region}_{method}_{str(min_year)}-{str(max_year)}_solar", "s_cfs")
-make_MEM_compatible(master, f"{date_new}_{region}_{method}_{str(min_year)}-{str(max_year)}_wind", "w_cfs")
+make_MEM_compatible(master, data_path + f"{date}_{region}_{method}_{str(min_year)}-{str(max_year)}_solar", "s_cfs")
+make_MEM_compatible(master, data_path + f"{date}_{region}_{method}_{str(min_year)}-{str(max_year)}_wind", "w_cfs")
 # """

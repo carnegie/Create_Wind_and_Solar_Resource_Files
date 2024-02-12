@@ -33,7 +33,7 @@ land_mask = MV.array(MV.masked_equal(land_mask_tmp,0.))
 land_mask.setAxis(0,lat);      land_mask.setAxis(1,lon)
 
 # Order of ISOs in the shapefile
-ISO_dict = {0: 'MISO', 1: 'SPP', 2: 'PJM', 3: 'ERCOT', 4: 'CISO', 5: 'ISONE', 6: 'NYISO'}
+ISO_dict = {0: 'MISO', 1: 'SPP', 2: 'PJM', 3: 'ERCOT', 4: 'CISO', 5: 'ISNE', 6: 'NYISO'}
 
 # ------------------------------------------------------------------------
 # """

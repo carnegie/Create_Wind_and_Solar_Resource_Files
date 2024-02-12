@@ -13,5 +13,5 @@ source /home/awongel/miniconda3/etc/profile.d/conda.sh
 
 conda activate capacity_factors_env
 
-python step2_get_time_series_newERA5.py 2018 REGION_PLACEHOLDER 3 20240209 CF_PLACEHOLDER MERRA2 MERRA2
+python step2_get_time_series_newERA5.py 2018 REGION_PLACEHOLDER 3 20240211 CF_PLACEHOLDER MERRA2 MERRA2
 

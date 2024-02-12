@@ -1,8 +1,8 @@
 import subprocess
 
 # Define the years to iterate over
-ISOs = ['CISO']#, 'MISO', 'ERCOT', 'ISNE']
-cfs = ['wcf'] #'scf', 
+ISOs = ['CISO', 'MISO', 'ERCOT', 'ISNE']
+cfs = ['scf', 'wcf'] 
 
 for iso in ISOs:
     for cf in cfs:
@@ -22,7 +22,3 @@ for iso in ISOs:
         # Submit the job
         subprocess.run(['sbatch', temp_script_path])
         
-        # Optional: Remove the temporary file if you don't need it after submission
-        # Make sure the job submission system has picked up the job before deleting
-        subprocess.run(['rm', temp_script_path])
-
